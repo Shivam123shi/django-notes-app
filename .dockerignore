@@ -1,0 +1,8 @@
+nano .dockerignore
+data/
+mysql/
+*.sqlite3
+__pycache__/
+.git/
+data/mysql/db/
+data/
