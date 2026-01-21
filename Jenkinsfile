@@ -1,29 +1,44 @@
-@Library('Shared')_
-pipeline{
-    agent { label 'dev-server'}
-    
+@Library("shared") _
+pipeline{   
+    agent { label "agent-sh"}
     stages{
-        stage("Code clone"){
+        stage("Hello"){
             steps{
-                sh "whoami"
-            clone("https://github.com/LondheShubham153/django-notes-app.git","main")
+                script{
+                    hello()
+                }
             }
         }
-        stage("Code Build"){
+        stage("Code"){
             steps{
-            dockerbuild("notes-app","latest")
-            }
-        }
-        stage("Push to DockerHub"){
-            steps{
-                dockerpush("dockerHubCreds","notes-app","latest")
-            }
-        }
+                script{
+                    clone("https://github.com/Shivam123shi/django-notes-app.git","main")
+                }
+            } 
+        } 
+        stage("Build"){
+            steps{ 
+                script{
+                docker_build("notes-app","latest","shivam206" )
+                }
+            } 
+        } 
+        stage("Push to dockerHub"){
+            steps{ 
+                script{
+                 docker_push("notes-app","latest","shivam206")   
+                }
+            } 
+        } 
         stage("Deploy"){
             steps{
-                deploy()
-            }
-        }
+                echo "This is deploying the code"
+                sh "docker compose up -d" 
+                
+            } 
+            
+        } 
         
-    }
+    } 
+    
 }
